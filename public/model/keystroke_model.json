@@ -1,0 +1,56 @@
+{
+  "model_name": "keystroke-logistic-cmu-v1",
+  "trained_at_utc": "2026-04-11T09:12:27.466003+00:00",
+  "dataset": {
+    "name": "CMU DSL Keystroke Benchmark",
+    "url": "https://www.cs.cmu.edu/~keystroke/DSL-StrongPasswordData.csv",
+    "subjects": 51,
+    "rows": 20400,
+    "genuine_subject": "s036",
+    "protocol": "200 genuine train, 200 genuine test, 5 impostor train + 5 impostor test per other subject"
+  },
+  "feature_order": [
+    "dwell_delta",
+    "flight_delta"
+  ],
+  "baseline_profile": {
+    "dwell_ms": 44.62463636363636,
+    "flight_ms": 559.28355
+  },
+  "scaler": {
+    "mean": [
+      24.60118828282829,
+      215.8348897777777
+    ],
+    "std": [
+      24.957434453352825,
+      143.16858220096617
+    ]
+  },
+  "weights": [
+    -6.108024053352517,
+    -0.28526854322070616
+  ],
+  "bias": -2.6675974185137377,
+  "threshold": 0.5874999999999999,
+  "metrics": {
+    "val_accuracy": 0.9955555555555555,
+    "val_far": 0.008,
+    "val_frr": 0.0,
+    "balanced_accuracy": 0.996
+  },
+  "counts": {
+    "train_positive": 200,
+    "train_negative": 250,
+    "test_positive": 200,
+    "test_negative": 250,
+    "tp": 200,
+    "tn": 248,
+    "fp": 2,
+    "fn": 0
+  },
+  "training": {
+    "seed": 42,
+    "algorithm": "LogisticRegression(class_weight='balanced')"
+  }
+}
