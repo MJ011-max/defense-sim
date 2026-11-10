@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:body>
+
+<w:p><w:r><w:t xml:space="preserve">Title: Defense-Sim: Keystroke Dynamics Simulator for Adaptive Authentication</w:t></w:r></w:p>
+<w:p><w:r><w:t xml:space="preserve">Authors: Munashe O. Jonga</w:t></w:r></w:p>
+<w:p><w:r><w:t xml:space="preserve">Affiliation: (your affiliation here)</w:t></w:r></w:p>
+<w:p><w:r><w:t xml:space="preserve"/></w:r></w:p>
+<w:p><w:r><w:t xml:space="preserve">Abstract</w:t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">We present Defense-Sim, a Vite + TypeScript demonstration of keystroke-dynamics authentication that simulates genuine and impostor typing behavior, tracks authentication drift, and applies an adaptive recovery strategy. The simulation uses dwell and flight timing features and a logistic-regression model artifact (trained on the CMU DSL benchmark) to score authentication attempts. On internal validation the model reports a balanced accuracy of 99.6% (val_accuracy = 0.9956, FAR = 0.8%, FRR = 0.0%). The paper summarizes the simulator architecture, the scoring method, the watchdog drift detector, and limitations for real-world deployment.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Keywords</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">keystroke dynamics; behavioral biometrics; drift detection; adaptive authentication; logistic regression</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">1. Introduction</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Keystroke dynamics studies the temporal patterns of typing to provide a behavioral biometric for user authentication. Defense-Sim is a browser-based simulator designed to (1) teach keystroke behavioral concepts, (2) demonstrate how drift affects authentication decisions, and (3) show a lightweight adaptive recovery mechanism. The app is implemented with Vite and TypeScript and is intentionally a front-end simulation without a backend for persistence.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">2. Related Work</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Behavioral biometrics literature uses dwell time and flight time as primary features for keystroke-based authentication; many works use logistic regression or similar lightweight classifiers on normalized timing deltas. The simulator references the CMU DSL benchmark protocol for training and evaluation.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Background and key concepts (adapted from the provided keystroke-dynamics reference):</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Keystroke dynamics is the study of timing and rhythm of typing as a behavioral biometric. Core measurements include dwell time (the duration a key is depressed) and flight time (the latency between releasing one key and pressing the next).</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Feature engineering commonly derives delta features (absolute or signed differences) between a candidate typing sample and a stored baseline profile; these deltas are then scaled (z-score or min-max) before classification.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Typical classifiers range from simple distance-based scoring (Euclidean, Mahalanobis) to probabilistic/logistic models and lightweight neural networks. For small-feature problems (e.g., dwell+flight) logistic regression or SVM with calibrated thresholds remain popular due to interpretability and low compute cost.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Evaluation protocols in the literature emphasize per-subject cross-validation with impostor sampling (e.g., CMU DSL strong-password protocol) and report metrics such as FAR, FRR, and balanced accuracy.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">3. Methodology</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Features:</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Dwell time: key-press duration per key (ms)</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Flight time: inter-key latency between consecutive keys (ms)</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Model:</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- A logistic regression model (class_weight='balanced') trained on the CMU DSL Keystroke Benchmark. Feature order: `dwell_delta`, `flight_delta`.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Baseline profile mean values: dwell_ms ≈ 44.62, flight_ms ≈ 559.28 (from the model artifact).</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Scaler statistics (mean, std) and learned weights/bias are stored in `public/model/keystroke_model.json`.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Drift Detection and Recovery:</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- The simulator tracks recent attempts and error rates in a sliding window to detect shifts in authentication performance.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- On detection of increased drift, an adaptive recovery mode increases the model's learning aggressiveness and temporarily adjusts thresholds to reduce false rejects.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Mathematical formulation</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Normalization (z-score) applied per feature:</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">$$x' = \frac{x - \mu}{\sigma}$$</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">where $x$ is the raw feature (e.g., dwell or flight), and $\mu,\sigma$ are the scaler mean and standard deviation from the model artifact.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Logistic model scoring (probability of being genuine):</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">$$\sigma(z)=\frac{1}{1+e^{-z}},\qquad z = w_1 x'_1 + w_2 x'_2 + b$$</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">where $x'_1,x'_2$ are the normalized `dwell_delta` and `flight_delta`, $w_1,w_2$ are learned weights, and $b$ is the bias. A sample is accepted when</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">$$\sigma(z) \ge \tau$$</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">with $\tau$ the tuned decision threshold (stored as `threshold` in the artifact).</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Score fusion (demo heuristic): combine model probability with a distance-based term:</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">$$\mathrm{score} = \alpha\,\sigma(z) + (1-\alpha)\,e^{-\mathrm{distance}}, \quad \alpha=0.7$$</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Drift detection (watchdog): compare mean error rate in two halves of a sliding window. Let $\bar{e}_{\mathrm{first}}$ and $\bar{e}_{\mathrm{second}}$ denote mean error (0/1) in the first and second halves; trigger when</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">$$\Delta_{error} = \bar{e}_{\mathrm{second}} - \bar{e}_{\mathrm{first}} > T_{\mathrm{drift}}$$</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">where $T_{\mathrm{drift}}$ is the drift tolerance (demo uses a fixed tolerance value).</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">4. Implementation</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">The application is implemented in TypeScript with Vite and renders a single-page UI. Key implementation artifacts include:</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- `src/main.ts`: application logic, actor persona definitions, enrollment and authentication capture, watchdog drift logic, and UI wiring.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- `public/model/keystroke_model.json`: model artifact containing scaler, weights, bias, threshold, and evaluation metrics.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">5. Results and Evaluation</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Model artifact reported metrics (from `public/model/keystroke_model.json`):</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Validation accuracy: 0.9956</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- False Acceptance Rate (FAR): 0.008 (0.8%)</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- False Rejection Rate (FRR): 0.0</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Balanced accuracy: 0.996</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Counts on test split: TP=200, TN=248, FP=2, FN=0</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">6. Discussion</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">The simulator demonstrates strong reported validation performance on the provided CMU DSL-derived model. However, the simulation is synthetic and uses a front-end-only setup, so results should not be interpreted as production-ready without real-world data collection, privacy considerations, and backend model lifecycle management.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">7. Limitations</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Front-end simulation only; no persistence or multi-device enrollment.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Limited feature set: only dwell and flight timings are used; other modalities (pressure, error corrections) are absent.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Persona parameters are hard-coded and not learned per-user in the demo.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Drift recovery heuristic is empirically tuned rather than statistically optimized.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">8. Conclusion</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">Defense-Sim is a pedagogical tool that illustrates keystroke dynamics, drift detection, and adaptive responses in a compact demo. Future work should integrate secure data collection, richer feature sets, and statistically principled drift detection.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve"/></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">References</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- Munashe O. Jonga, Munashe_O_Jonga_Final_Dissertation_2026.docx (dissertation) — include concise citation here.</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- CMU Keystroke Dataset: https://www.cs.cmu.edu/~keystroke/DSL-StrongPasswordData.csv</w;t></w;r></w;p>
+<w;p><w;r><w;t xml:space="preserve">- A. Reference, "Key-stroke dynamics: Concept, techniques and applications," (adapted content) — see local file `key-stroke dynamics.comcept technics and applicationdocx.pdf` for detailed background and applied examples.</w;t></w;r></w;p>
+
+    <w:sectPr/>
+  </w:body>
+</w:document>

@@ -1,0 +1,90 @@
+{
+  "input": "C:\\Users\\MUNASHE\\Desktop\\Proposal template.docx",
+  "fonts_by_char_count": {
+    "Times New Roman": 2116
+  },
+  "direct_run_formatting_runs": 93,
+  "direct_paragraph_formatting_paragraphs": 62,
+  "heading_like_paragraphs_not_heading_style": [
+    {
+      "para_index": 1,
+      "text": "TYPE YOUR TOPIC HERE",
+      "style": "Normal"
+    },
+    {
+      "para_index": 5,
+      "text": "NAME SURNAME",
+      "style": "Normal"
+    },
+    {
+      "para_index": 10,
+      "text": "BACHELOR TECHNOLOGY IN INFORMATION SECURITY AND ASSURANCE",
+      "style": "Normal"
+    },
+    {
+      "para_index": 15,
+      "text": "HARARE INSTITUTE OF TECHNOLOGY",
+      "style": "Normal"
+    }
+  ],
+  "examples": {
+    "direct_paragraph_formatting": [
+      {
+        "para_index": 1,
+        "text": "TYPE YOUR TOPIC HERE",
+        "style": "Normal"
+      },
+      {
+        "para_index": 4,
+        "text": "",
+        "style": "Normal"
+      },
+      {
+        "para_index": 5,
+        "text": "NAME SURNAME",
+        "style": "Normal"
+      },
+      {
+        "para_index": 6,
+        "text": "",
+        "style": "Normal"
+      },
+      {
+        "para_index": 23,
+        "text": "",
+        "style": "Normal"
+      }
+    ],
+    "direct_run_formatting": [
+      {
+        "para_index": 1,
+        "run_text": "TYPE ",
+        "style": "Normal"
+      },
+      {
+        "para_index": 1,
+        "run_text": "YOUR TOPIC HERE",
+        "style": "Normal"
+      },
+      {
+        "para_index": 3,
+        "run_text": "By",
+        "style": "Normal"
+      },
+      {
+        "para_index": 5,
+        "run_text": "NAME SURNAME",
+        "style": "Normal"
+      },
+      {
+        "para_index": 8,
+        "run_text": "Submitted in partial fulfilment of the requirements for the degree",
+        "style": "Normal"
+      }
+    ]
+  },
+  "notes": [
+    "Direct formatting is not always wrong, but it often causes inconsistent output when templates change.",
+    "Heading-like paragraphs not using Heading styles can break TOC and accessibility."
+  ]
+}
